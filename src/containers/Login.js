@@ -1,20 +1,26 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import LoaderButton from "../components/LoaderButton";
 import "./Login.css";
 import axios from 'axios';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
-
+    this.autenticate = this.autenticate.bind(this);
     this.state = {
+      isLoading: false,
       email: "",
-      password: ""
+      password: "",
     };
   }
 
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
+  }
+
+  autenticate(){
+    this.props.userHasAuthenticated(true);
   }
 
   handleChange = event => {
@@ -23,12 +29,12 @@ export default class Login extends Component {
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
     
+      this.setState({ isLoading: true });
       var emailS= this.state.email;
       var passwordS = this.state.password;
-      this.props.userHasAuthenticated(true);
       
       if(emailS != null &&  passwordS != null){
      
@@ -36,13 +42,16 @@ export default class Login extends Component {
         {
           username: emailS, password: passwordS
         })
-        .then(function (response) {
-            //handle success
-            console.log(response);
+        .then((response)=> {
+            console.log(" this is the response: " + response.data);
             
+            if(response.data === 'Success'){
+              this.autenticate();
+              this.props.history.push("/");
+            }
         })
         .catch(function (response) {
-            //handle error
+            this.setState({ isLoading: false });
             console.log(response);
         });
       }
@@ -69,14 +78,15 @@ export default class Login extends Component {
               type="password"
             />
           </FormGroup>
-          <Button
+          <LoaderButton
             block
             bsSize="large"
             disabled={!this.validateForm()}
             type="submit"
-          >
-            Login
-          </Button>
+            isLoading={this.state.isLoading}
+            text="Login"
+            loadingText="Logging in…"
+          />
         </form>
       </div>
     );
