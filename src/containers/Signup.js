@@ -53,12 +53,11 @@ export default class Signup extends Component {
             console.log(" this is the response: " + response.data);
             
             if(response.data === 'Success'){
-              this.autenticate();
               this.props.history.push("/");
             }
         })
         .catch(function (response) {
-            this.setState({ isLoading: false });
+            //this.setState({ isLoading: false });
             console.log(response);
         });
 
