@@ -37,7 +37,7 @@ export default class Users extends Component {
              
                  <ListGroupItem
                     key={user.id}
-                    href={`/users/${user.id}`}
+                    href={`/user/${user.id}`}
                     onClick={this.handleuserClick}
                     header='User'
                   >

@@ -1,10 +1,12 @@
 ﻿  TODO
 
+. use read properties instead of harcode
+
 . Disallowed double signup same email
 
 . Customize dataBase instead mongodb
 
-.sequrity user isLoggedIn
+. Security user isLoggedIn
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
