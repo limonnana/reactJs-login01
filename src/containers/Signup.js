@@ -19,8 +19,7 @@ export default class Signup extends Component {
       phone:"",
       email: "",
       password: "",
-      confirmPassword: "",
-      newUser: null
+      confirmPassword: ""
     };
   }
 

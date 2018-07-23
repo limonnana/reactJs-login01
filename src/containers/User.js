@@ -13,22 +13,20 @@ export default class Notes extends Component {
     super(props);
 
     this.state = {
-      id: null,
-      name:null,
-      lastName:null,
-      phone:null,
-      email:null,
-      password:null,
-      confirmPassword:null
+      isLoading: false,
+      isDeleting:false,
+      id:"",
+      name:"",
+      lastName:"",
+      phone:"",
+      email: ""
     };
   }
 
   validateForm() {
     return (
       this.state.email.length > 0 &&
-      this.state.password.length > 0 &&
-      this.state.phone.length > 0 &&
-      this.state.password === this.state.confirmPassword
+      this.state.phone.length > 0 
     );
   }
 
@@ -38,6 +36,20 @@ export default class Notes extends Component {
       [event.target.id]: event.target.value
     });
   }
+  
+  handleDelete = async event => {
+    event.preventDefault();
+  
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user ?"
+    );
+  
+    if (!confirmed) {
+      return;
+    }
+  
+    this.setState({ isDeleting: true });
+  }
 
   handleSubmit = async event => {
     event.preventDefault();
@@ -46,7 +58,7 @@ export default class Notes extends Component {
 
     axios.post('http://localhost:9000/updateUser', 
         {
-          name: this.state.name, lastName: this.state.lastName ,email:this.state.email, phone:this.state.phone, password: this.state.password
+          id:this.state.id, name: this.state.name, lastName: this.state.lastName ,email:this.state.email, phone:this.state.phone
         })
         .then((response)=> {
             console.log(" this is the response: " + response.data);
@@ -88,10 +100,15 @@ export default class Notes extends Component {
   }
 
   render() {
-    //return <div className="User">{this.state.id} {this.state.name} {this.state.lastName} {this.state.phone} {this.state.email}</div>;
+   
     return (
         <form onSubmit={this.handleSubmit}>
-         
+           <FormGroup controlId="id" >
+          <FormControl 
+              value={this.state.id}
+               type="hidden"
+            /> 
+          </FormGroup>
           <FormGroup controlId="name" bsSize="large">
             <ControlLabel>Name</ControlLabel>
             <FormControl
@@ -125,31 +142,27 @@ export default class Notes extends Component {
               type="text"
             />
           </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <FormGroup controlId="confirmPassword" bsSize="large">
-            <ControlLabel>Confirm Password</ControlLabel>
-            <FormControl
-              value={this.state.confirmPassword}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
+         
           <LoaderButton
             block
             bsSize="large"
-            //disabled={!this.validateForm()}
+            disabled={!this.validateForm()}
             type="submit"
             isLoading={this.state.isLoading}
-            text="Signup"
-            loadingText="Signing up…"
+            text="Update"
+            loadingText="Updating user…"
           />
+          <br/>
+          <LoaderButton
+            block
+            bsStyle="danger"
+            bsSize="large"
+            isLoading={this.state.isDeleting}
+            onClick={this.handleDelete}
+            text="Delete"
+            loadingText="Deleting…"
+          />
+           
         </form>
       );
     }
