@@ -39,9 +39,9 @@ export default class Users extends Component {
                     key={user.id}
                     href={`/user/${user.id}`}
                     onClick={this.handleuserClick}
-                    header='User'
+                    header={user.email}
                   >
-                  {user.id}  {user.name} {user.lastName} {user.email} {user.phone}
+                  {user.id}  {user.name} {user.lastName}  {user.phone}
                   </ListGroupItem>
         )}
         

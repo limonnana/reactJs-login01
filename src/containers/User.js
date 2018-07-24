@@ -46,9 +46,10 @@ export default class Notes extends Component {
   
     if (!confirmed) {
       return;
-    }
-  
-    this.setState({ isDeleting: true });
+    }else{
+     
+      this.deleteUser();
+     }
   }
 
   handleSubmit = async event => {
@@ -84,6 +85,15 @@ export default class Notes extends Component {
       alert(e);
     }
   }
+
+  deleteUser(){
+    this.setState({ isDeleting: true });
+    const url = "http://localhost:9000/deleteUser/" + this.props.match.params.id;
+      axios.get(url).then(res => {
+        this.setState({ isDeleting: false });
+        this.props.history.push("/users");
+      })
+    }
 
   getUser() {
       const url = "http://localhost:9000/user/" + this.props.match.params.id;
