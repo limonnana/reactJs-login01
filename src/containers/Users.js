@@ -17,7 +17,9 @@ export default class Users extends Component {
       async componentDidMount() {
        
         try {
-            axios.get('http://localhost:9000/userList')
+            
+            var domain =  process.env.REACT_APP_DOMAIN;
+            axios.get(domain + '/userList')
             .then(res => {
                const users = res.data;
                console.log(users);

@@ -8,11 +8,13 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.autenticate = this.autenticate.bind(this);
+   
     this.state = {
       isLoading: false,
       email: "",
       password: "",
     };
+    
   }
 
   validateForm() {
@@ -30,15 +32,18 @@ export default class Login extends Component {
   }
 
   handleSubmit = async event => {
-    event.preventDefault();
-    
+     
+      event.preventDefault();
+       
       this.setState({ isLoading: true });
       var emailS= this.state.email;
       var passwordS = this.state.password;
       
       if(emailS != null &&  passwordS != null){
-     
-      axios.post('http://localhost:9000/logintest', 
+      
+        var domain =  process.env.REACT_APP_DOMAIN;
+      
+      axios.post(domain + '/logintest', 
         {
           username: emailS, password: passwordS
         })
@@ -51,7 +56,7 @@ export default class Login extends Component {
             }
         })
         .catch(function (response) {
-            this.setState({ isLoading: false });
+           // this.setState({isLoading:false} );
             console.log(response);
         });
       }

@@ -6,6 +6,7 @@ import Routes from "./Routes";
 import "./App.css";
 
 
+
 class App extends Component {
 
   constructor(props) {
@@ -16,6 +17,8 @@ class App extends Component {
     };
   }
   
+ 
+
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
   }
@@ -26,8 +29,9 @@ class App extends Component {
   }
 
   render() {
-
-    const childProps = {
+      //This is a call to config properties .env file in root folder project
+      require('dotenv').config();
+      const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated
     };
@@ -37,22 +41,32 @@ class App extends Component {
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/users">Users</Link>
+              <Link to="/users">Limonnana</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-            {this.state.isAuthenticated ? 
-            <NavItem onClick={this.handleLogout}>Logout</NavItem> : 
+            {this.state.isAuthenticated ? (
+            <Fragment>
+            <LinkContainer to="/users">
+            <NavItem>Users</NavItem>
+            </LinkContainer>
+
+            <NavItem onClick={this.handleLogout}>Logout</NavItem>
+            </Fragment>
+          
+          
+          ) : (
             <Fragment>
             <LinkContainer to="/signup">
             <NavItem>Signup</NavItem>
             </LinkContainer>
-        <LinkContainer to="/login">
-        <NavItem>Login</NavItem>
-        </LinkContainer>
-    </Fragment>
+           <LinkContainer to="/login">
+           <NavItem>Login</NavItem>
+           </LinkContainer>
+           </Fragment>
+            )
 }
             </Nav>
           </Navbar.Collapse>

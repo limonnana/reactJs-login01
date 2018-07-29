@@ -8,7 +8,7 @@ import {
 import "./User.css";
 import axios from 'axios';
 
-export default class Notes extends Component {
+export default class User extends Component {
   constructor(props) {
     super(props);
 
@@ -19,7 +19,8 @@ export default class Notes extends Component {
       name:"",
       lastName:"",
       phone:"",
-      email: ""
+      email: "",
+      domain: process.env.REACT_APP_DOMAIN
     };
   }
 
@@ -47,8 +48,7 @@ export default class Notes extends Component {
     if (!confirmed) {
       return;
     }else{
-     
-      this.deleteUser();
+     this.deleteUser();
      }
   }
 
@@ -56,8 +56,8 @@ export default class Notes extends Component {
     event.preventDefault();
    
     this.setState({ isLoading: true });
-
-    axios.post('http://localhost:9000/updateUser', 
+   
+    axios.post(this.state.domain + '/updateUser', 
         {
           id:this.state.id, name: this.state.name, lastName: this.state.lastName ,email:this.state.email, phone:this.state.phone
         })
@@ -88,7 +88,7 @@ export default class Notes extends Component {
 
   deleteUser(){
     this.setState({ isDeleting: true });
-    const url = "http://localhost:9000/deleteUser/" + this.props.match.params.id;
+    const url = this.state.domain + "/deleteUser/" + this.props.match.params.id;
       axios.get(url).then(res => {
         this.setState({ isDeleting: false });
         this.props.history.push("/users");
@@ -96,7 +96,7 @@ export default class Notes extends Component {
     }
 
   getUser() {
-      const url = "http://localhost:9000/user/" + this.props.match.params.id;
+      const url = this.state.domain + "/user/" + this.props.match.params.id;
       axios.get(url).then(res => {
         
         const id = res.data.id;
@@ -104,7 +104,7 @@ export default class Notes extends Component {
         const lastName = res.data.lastName;
         const phone = res.data.phone;
         const email = res.data.email;
-        this.setState({id, name , lastName,phone,email });
+        this.setState({id, name , lastName, phone, email });
         
     })
   }

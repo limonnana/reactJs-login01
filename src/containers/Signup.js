@@ -43,8 +43,8 @@ export default class Signup extends Component {
     event.preventDefault();
    
     this.setState({ isLoading: true });
-
-    axios.post('http://localhost:9000/signup', 
+    var domain =  process.env.REACT_APP_DOMAIN;
+    axios.post(domain + '/signup', 
         {
           name: this.state.name, lastName: this.state.lastName ,email:this.state.email, phone:this.state.phone, password: this.state.password
         })
