@@ -13,13 +13,12 @@ class App extends Component {
     super(props);
   
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: false,
+      theEmail:""
     };
   }
   
- 
-
-  userHasAuthenticated = authenticated => {
+    userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
   }
 
@@ -28,12 +27,19 @@ class App extends Component {
     this.props.history.push("/login");
   }
 
+  getEmail = email => {
+    this.setState({theEmail:email});
+  }
+
   render() {
       //This is a call to config properties .env file in root folder project
       require('dotenv').config();
+    
       const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated
+      userHasAuthenticated: this.userHasAuthenticated,
+      getEmail: this.getEmail,
+      theEmail:this.state.theEmail
     };
 
     return (

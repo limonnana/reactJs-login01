@@ -23,6 +23,7 @@ export default class Login extends Component {
 
   autenticate(){
     this.props.userHasAuthenticated(true);
+    this.props.getEmail(this.state.email);
   }
 
   handleChange = event => {
