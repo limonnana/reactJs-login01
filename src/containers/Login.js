@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
+import Cookies from 'universal-cookie';
 import "./Login.css";
 import axios from 'axios';
 
@@ -13,6 +14,7 @@ export default class Login extends Component {
       isLoading: false,
       email: "",
       password: "",
+      userId:""
     };
     
   }
@@ -21,9 +23,15 @@ export default class Login extends Component {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
-  autenticate(){
+  autenticate(dataResponse){
     this.props.userHasAuthenticated(true);
     this.props.getEmail(this.state.email);
+    const cookie = new Cookies();
+    const value = {"userId":dataResponse.userId,"token":dataResponse.token};
+    cookie.set('limonnana', value, { path: '/',maxAge: 3600});
+    console.log("cookieToSet:" + JSON.stringify(value));
+    const theCookie = JSON.stringify(cookie.get('limonnana'));
+    console.log("cookieFromClient:" + theCookie);
   }
 
   handleChange = event => {
@@ -42,17 +50,18 @@ export default class Login extends Component {
       
       if(emailS != null &&  passwordS != null){
       
-        var domain =  process.env.REACT_APP_DOMAIN;
+        const domain =  process.env.REACT_APP_DOMAIN;
       
-      axios.post(domain + '/logintest', 
+      axios.post(domain + '/login', 
         {
           username: emailS, password: passwordS
         })
         .then((response)=> {
-            console.log(" this is the response: " + response.data);
+            console.log(" this is the response: " + response.data.response);
             
-            if(response.data === 'Success'){
-              this.autenticate();
+            if(response.data.response === 'Success'){
+              var dataResponse = {token: response.data.token, userId: response.data.userId };
+              this.autenticate(dataResponse);
               this.props.history.push("/");
             }
         })

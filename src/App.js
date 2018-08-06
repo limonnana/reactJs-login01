@@ -14,7 +14,8 @@ class App extends Component {
   
     this.state = {
       isAuthenticated: false,
-      theEmail:""
+      theEmail:"",
+      token:""
     };
   }
   
@@ -39,7 +40,8 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       getEmail: this.getEmail,
-      theEmail:this.state.theEmail
+      theEmail:this.state.theEmail,
+      token:this.state.token
     };
 
     return (
