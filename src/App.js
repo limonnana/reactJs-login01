@@ -14,8 +14,7 @@ class App extends Component {
   
     this.state = {
       isAuthenticated: false,
-      theEmail:"",
-      token:""
+      theEmail:""
     };
   }
   
@@ -23,6 +22,7 @@ class App extends Component {
     this.setState({ isAuthenticated: authenticated });
   }
 
+  
   handleLogout = event => {
     this.userHasAuthenticated(false);
     this.props.history.push("/login");
@@ -40,16 +40,15 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       getEmail: this.getEmail,
-      theEmail:this.state.theEmail,
-      token:this.state.token
-    };
+      theEmail:this.state.theEmail
+      };
 
     return (
       <div className="App container">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/users">Limonnana</Link>
+              <Link to="/">Limonnana</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -59,6 +58,10 @@ class App extends Component {
             <Fragment>
             <LinkContainer to="/users">
             <NavItem>Users</NavItem>
+            </LinkContainer>
+
+            <LinkContainer to="/setDate">
+            <NavItem>Set Date</NavItem>
             </LinkContainer>
 
             <NavItem onClick={this.handleLogout}>Logout</NavItem>

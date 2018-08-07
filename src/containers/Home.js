@@ -7,15 +7,15 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
+    this.getSession();
     this.state = {
       isLoading: false,
       email: this.props.theEmail
     }
     console.log("EMAIL IS: " + this.props.theEmail);
-    this.session();
-  }
+   }
 
-  session(){
+  getSession(){
     const cookie = new Cookies();
     var theCookie = cookie.get('limonnana');
     if(theCookie !== undefined){
@@ -30,15 +30,21 @@ export default class Home extends Component {
     .then((response)=> {
         console.log(" this is the response userId: " + response.data.userId);
         
-        if(response.data.userId !== 'Success'){
+        if(response.data.userId !== undefined){
           console.log("this is the session ");
-          
+          this.props.userHasAuthenticated(true);
+        }else{
+          console.log(" No Session alive, token expired ");
+          this.props.history.push("/login");
         }
     })
     .catch(function (response) {
        // this.setState({isLoading:false} );
         console.log(response);
     });
+    }else{
+      console.log(" No Session alive from cookie");
+      this.props.history.push("/login");
     }
   }
 

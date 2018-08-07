@@ -52,19 +52,9 @@ export default class Users extends Component {
             this.props.history.push(event.currentTarget.getAttribute("href"));
           }
 
-      renderLander() {
-        return (
-            <div className="Home">
-              <div className="lander">
-                <p>Users List Table </p>
-              </div>
-            </div>
-          )
-      }
-
       renderUsers() {
         return (
-          <div className="users">
+          <div className="Users">
             <PageHeader>Users</PageHeader>
             <ListGroup>
               {!this.state.isLoading && this.renderUserList()}
@@ -75,7 +65,7 @@ export default class Users extends Component {
 
       render() {
         return (
-          <div className="Home">
+          <div className="Users">
            {this.renderUsers()}
           </div>
         );

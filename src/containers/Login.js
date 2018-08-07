@@ -13,8 +13,7 @@ export default class Login extends Component {
     this.state = {
       isLoading: false,
       email: "",
-      password: "",
-      userId:""
+      password: ""
     };
     
   }
@@ -29,9 +28,6 @@ export default class Login extends Component {
     const cookie = new Cookies();
     const value = {"userId":dataResponse.userId,"token":dataResponse.token};
     cookie.set('limonnana', value, { path: '/',maxAge: 3600});
-    console.log("cookieToSet:" + JSON.stringify(value));
-    const theCookie = JSON.stringify(cookie.get('limonnana'));
-    console.log("cookieFromClient:" + theCookie);
   }
 
   handleChange = event => {
