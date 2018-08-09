@@ -11,7 +11,7 @@ import axios from 'axios';
 export default class Signup extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       isLoading: false,
       name:"",
@@ -19,8 +19,54 @@ export default class Signup extends Component {
       phone:"",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      errorEmail: "",
+      errorPassword: ""
+      
     };
+  }
+
+  validatePassword(){
+    let toReturn = false;
+    let password = this.state.password;
+    let result = "";
+    var reg = new RegExp("^(?=.*?[a-z])(?=.*?[0-9]).{7,22}$");
+    var test = reg.test(password);
+    if(test){
+      console.log('password is valid');
+      toReturn = true;
+   }else{
+     console.log('fail, password is invalid');
+     result = "Password is not valid";
+     toReturn = false;
+   }        
+   this.setState({errorPassword:result}); 
+   return toReturn;
+  }
+
+  validateEmail(){
+   let email = this.state.email;
+   let result = "";
+   let toReturn = false;
+   let emailValid = email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+   if(emailValid){
+    console.log('email is valid');
+    toReturn = true;
+  }else{
+   console.log('emailValid is invalid');
+   result = " Email is not valid";
+   toReturn = false;
+  }   
+  this.setState({errorEmail:result});    
+  return toReturn;
+  }
+
+  validateFields(){
+    if(this.validatePassword() && this.validateEmail()){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   validateForm() {
@@ -41,7 +87,8 @@ export default class Signup extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-   
+    if(this.validateFields()){
+
     this.setState({ isLoading: true });
     var domain =  process.env.REACT_APP_DOMAIN;
     axios.post(domain + '/signup', 
@@ -52,14 +99,14 @@ export default class Signup extends Component {
             console.log(" this is the response: " + response.data);
             
             if(response.data === 'Success'){
-              this.props.history.push("/");
+              this.props.history.push("/login");
             }
         })
         .catch(function (response) {
             //this.setState({ isLoading: false });
             console.log(response);
         });
-
+      }
     this.setState({ isLoading: false });
   }
 
@@ -92,7 +139,8 @@ export default class Signup extends Component {
             value={this.state.email}
             onChange={this.handleChange}
           />
-        </FormGroup>
+          </FormGroup>
+        <span style={{color:"red"}}>{this.state.errorEmail}</span>
         <FormGroup controlId="phone" bsSize="large">
           <ControlLabel>Phone</ControlLabel>
           <FormControl
@@ -109,6 +157,7 @@ export default class Signup extends Component {
             type="password"
           />
         </FormGroup>
+        <span style={{color:"red"}}>{this.state.errorPassword}</span>
         <FormGroup controlId="confirmPassword" bsSize="large">
           <ControlLabel>Confirm Password</ControlLabel>
           <FormControl

@@ -2,6 +2,8 @@ import { LinkContainer } from "react-router-bootstrap";
 import React, { Component, Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 import Routes from "./Routes";
 import "./App.css";
 
@@ -11,7 +13,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-  
+    this.getSession();
     this.state = {
       isAuthenticated: false,
       theEmail:""
@@ -22,11 +24,47 @@ class App extends Component {
     this.setState({ isAuthenticated: authenticated });
   }
 
-  
-  handleLogout = event => {
+   handleLogout = event => {
     this.userHasAuthenticated(false);
     this.props.history.push("/login");
   }
+  
+  
+
+  getSession(){
+    const cookie = new Cookies();
+    var theCookie = cookie.get('limonnana');
+
+    if(theCookie !== undefined){
+    let token = theCookie.token;
+    let userId = theCookie.userId;
+    console.log("token:" + token + " userId:" + userId);
+    const domain =  process.env.REACT_APP_DOMAIN;
+    axios.post(domain + '/getSession', 
+    {
+      userId: userId, token: token
+    })
+    .then((response)=> {
+        console.log(" this is the response userId: " + response.data.userId);
+        
+        if(response.data.userId !== undefined){
+          console.log("this is the session ");
+          this.props.userHasAuthenticated(true);
+        }else{
+          console.log(" No Session alive, token expired ");
+         // this.props.history.push("/login");
+        }
+    })
+    .catch(function (response) {
+       // this.setState({isLoading:false} );
+        console.log(response);
+    });
+    }else{
+      console.log(" No Session alive from cookie");
+     // this.props.history.push("/login");
+    }
+  }
+
 
   getEmail = email => {
     this.setState({theEmail:email});
